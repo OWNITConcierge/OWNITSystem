@@ -211,13 +211,26 @@ export default function CoachConsole({ user }: Props) {
         body: JSON.stringify(payload),
       });
 
-      const genData = await genRes.json();
-      if (!genRes.ok || !genData?.ok) {
-        alert(genData?.error || "Generate failed");
-        return;
-      }
+     if (!genRes.ok) {
+  let msg = "Generate failed";
+  try {
+    const j = await genRes.json();
+    msg = j?.error || msg;
+  } catch {}
+  alert(msg);
+  return;
+}
 
-      window.open(genData.reportUrl, "_blank");
+const html = await genRes.text();
+const w = window.open("", "_blank");
+if (!w) {
+  alert("Popup blocked — please allow popups for this site.");
+  return;
+}
+w.document.open();
+w.document.write(html);
+w.document.close();
+
     } catch (e) {
       console.error(e);
       alert("Generate failed (see console).");

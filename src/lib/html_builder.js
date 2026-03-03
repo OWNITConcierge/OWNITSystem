@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 const GOLD = "#bd9a60";
-const DEBUG = process.env.OI_DEBUG === "1";
+const DEBUG = process.env.OI_DEBUG === "0";
 
 const TUNE = {
   // Page padding
@@ -499,10 +499,6 @@ function bestPracticesHero(bp = {}) {
    buildHtml (NO SAMPLE DATA)
 ========================================================= */
 export function buildHtml(data, resolvedImages) {
-  const bg1 = readAsDataUrl("reference/page1.png");
-  const bg2 = readAsDataUrl("reference/page2.png");
-  const bg3 = readAsDataUrl("reference/page3.png");
-  const bg4 = readAsDataUrl("reference/page4.png");
 
   const logo = readAsDataUrl("reference/logo.png");
 
@@ -1262,11 +1258,6 @@ export function buildHtml(data, resolvedImages) {
       pointer-events:none;
       z-index: 0;
     }
-    .page > *{ position: relative; z-index: 1; }
-    .debug .page.page1::before{ background-image: url("${bg1}"); }
-    .debug .page.page2::before{ background-image: url("${bg2}"); }
-    .debug .page.page3::before{ background-image: url("${bg3}"); }
-    .debug .page.page4::before{ background-image: url("${bg4}"); }
   `;
 
   const headerHtml = `
