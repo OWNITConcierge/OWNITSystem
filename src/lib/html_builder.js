@@ -170,7 +170,7 @@ function parseCnaItem(item) {
 }
 
 function cnaBlock(cna) {
-  const bg = readAsDataUrl("reference/cna_bg.png") || "";
+  const bg = assetUrl("reference/cna_bg.png") || "";
 
   // If CNA missing entirely, show not assessed
   if (!cna || typeof cna !== "object") {
@@ -469,7 +469,7 @@ function timelineRows3Col(rows = []) {
 }
 
 function bestPracticesHero(bp = {}) {
-  const bg = readAsDataUrl(bp?.bg_image || "reference/p5_best.png") || "";
+  const bg = assetUrl(bp?.bg_image || "reference/p5_best.png") || "";
   const bullets = Array.isArray(bp?.bullets) ? bp.bullets : [];
 
   return `
