@@ -1,6 +1,3 @@
-import fs from "fs";
-import path from "path";
-
 const GOLD = "#bd9a60";
 const DEBUG = process.env.OI_DEBUG === "0";
 
@@ -48,23 +45,16 @@ function esc(s) {
     .replace(/'/g, "&#039;");
 }
 
-function readAsDataUrl(relOrAbsPath) {
-  if (!relOrAbsPath) return null;
-  if (typeof relOrAbsPath === "string" && relOrAbsPath.startsWith("data:")) return relOrAbsPath;
+function assetUrl(p) {
+  if (!p) return "";
+  if (String(p).startsWith("http")) return p;
+  if (String(p).startsWith("data:")) return p;
 
-  const abs = path.isAbsolute(relOrAbsPath) ? relOrAbsPath : path.resolve(relOrAbsPath);
-  const ext = path.extname(abs).toLowerCase().replace(".", "");
-  const mime =
-    ext === "png"
-      ? "image/png"
-      : ext === "jpg" || ext === "jpeg"
-      ? "image/jpeg"
-      : ext === "webp"
-      ? "image/webp"
-      : "application/octet-stream";
+  // If you pass "reference/logo.png" -> "/reference/logo.png"
+  if (String(p).startsWith("reference/")) return `/${p}`;
 
-  const b64 = fs.readFileSync(abs).toString("base64");
-  return `data:${mime};base64,${b64}`;
+  // If you pass "logo.png" -> "/reference/logo.png"
+  return `/reference/${p}`;
 }
 
 function list(items) {
@@ -124,7 +114,7 @@ function sectionBlock(title, bodyHtml, bodyClass = "") {
    p1.dna_rows = [{ title, description, ... }, ...]
 --------------------------- */
 function dnaTierRows(rows = []) {
-  const stairs = readAsDataUrl("reference/dna_stairs.png") || "";
+  const stairs = assetUrl("reference/dna_stairs.png") || "";
   const items = (rows?.length ? rows : []).slice(0, 3);
 
   if (!items.length) {
@@ -500,7 +490,7 @@ function bestPracticesHero(bp = {}) {
 ========================================================= */
 export function buildHtml(data, resolvedImages) {
 
-  const logo = readAsDataUrl("reference/logo.png");
+  const logo = assetUrl("reference/logo.png");
 
   const client = data?.client || {};
   const team = data?.team || {};
@@ -1305,8 +1295,8 @@ export function buildHtml(data, resolvedImages) {
   /* --------------------------
      PAGE 2 (NO FALLBACKS)
   --------------------------- */
-  const p2LeftImg = readAsDataUrl("reference/p2_left.png");
-  const p2RightImg = readAsDataUrl("reference/p2_right.png");
+  const p2LeftImg = assetUrl("reference/p2_left.png");
+  const p2RightImg = assetUrl("reference/p2_right.png");
 
   const nutritionGoalsTree = Array.isArray(p2?.nutrition_goals)
     ? p2.nutrition_goals.map((g) => ({
@@ -1368,12 +1358,12 @@ export function buildHtml(data, resolvedImages) {
   --------------------------- */
   const ingredients = p3?.ingredients || {};
 
-  const ingProteinBg = readAsDataUrl("reference/ing_protein.png");
-  const ingSeafoodBg = readAsDataUrl("reference/ing_seafood.png");
-  const ingVegBg = readAsDataUrl("reference/ing_vegetables.png");
-  const ingFruitBg = readAsDataUrl("reference/ing_fruit.png");
-  const ingFatsBg = readAsDataUrl("reference/ing_fats.png");
-  const ingDairyBg = readAsDataUrl("reference/ing_dairy.png");
+  const ingProteinBg = assetUrl("reference/ing_protein.png");
+  const ingSeafoodBg = assetUrl("reference/ing_seafood.png");
+  const ingVegBg = assetUrl("reference/ing_vegetables.png");
+  const ingFruitBg = assetUrl("reference/ing_fruit.png");
+  const ingFatsBg = assetUrl("reference/ing_fats.png");
+  const ingDairyBg = assetUrl("reference/ing_dairy.png");
 
   const page3 = `
     <div class="page page3">
@@ -1395,8 +1385,8 @@ export function buildHtml(data, resolvedImages) {
   /* --------------------------
      PAGE 4 (already mostly “not assessed yet”)
   --------------------------- */
-  const p4RefuelImg = readAsDataUrl("reference/p4_refuel.png");
-  const p4RestImg = readAsDataUrl("reference/p4_rest.png");
+  const p4RefuelImg = assetUrl("reference/p4_refuel.png");
+  const p4RestImg = assetUrl("reference/p4_rest.png");
 
   const p4ExerciseWeek = p4?.exercise?.week || p4?.exercise?.weekly || {};
   const p4Mindset = p4?.mindset || {};
